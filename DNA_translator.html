@@ -1,0 +1,455 @@
+<!DOCTYPE html><!--HTML5-->
+<html>
+ <head>
+  <meta http-equiv="content-type" content="text/html">
+  <meta charset="UTF-8">
+  <meta name="author" content="حمزة عبّاد">
+  <meta name="author-email" content="hamza.abbad@gmail.com">
+  <meta name="application-name" content="مترجم الحمض النووي">
+  <title>مترجم الحمض النووي</title>
+  <style type="text/css">
+   body { font : 15px/20px arial,sans-serif;
+		  text-align : center; }
+   h1 { font-size : 150%;
+        width : 500px;   
+        color : LimeGreen;
+		border : 1px solid LawnGreen;
+		margin : 5px auto 5px auto; 
+		background-color : GreenYellow;
+		padding : 5px;}
+   h2 { font-size : 110%;
+        color : Green; }
+   .widget { border : 3px solid LawnGreen;
+             background-color : GreenYellow;
+			 width : 500px; 
+			 border-radius : 5px;
+			 margin : 5px auto 5px auto;
+             padding : 5px;			 
+			 font-weight: bold;
+			 color : Green;}
+	select,input[type="text"] { border : 2px solid LimeGreen; }
+	select:hover,select:focus,input[type="text"]:hover,input[type="text"]:focus { border-color : LawnGreen; }
+	/*select:focus > option:checked { background-color : LawnGreen !important;
+                                    color : LimeGreen !important; }*/
+	option { border-width : 1px 0px 0px 0px;
+	         border-style : solid;
+			 border-color : LimeGreen; }
+	input[type="text"] { width : 400px;
+	                     direction : ltr; }
+	#error { display : none;
+  	         color : Red;
+			 background-color : Orange;
+			 border-color : Red; }
+	#container {margin : 10% auto auto auto;
+                background-color: WhiteSmoke;
+				border : 1px dotted LightGray;
+				height : 100%;
+                width : 600px; }
+	.notice { opacity : 0.7;
+	          background-color : LightCyan;
+			  border-color : LightSkyBlue;
+			  color : DodgerBlue;
+			  font-weight : normal;
+			  font-size : 110%;
+			  display : none;}
+	#aboutAuthor table, #aboutAuthor th, #aboutAuthor td { border : 0px Black none;
+	                                                       padding : 2px;}
+	#aboutAuthor th { color : RoyalBlue;}
+	#aboutAuthor td { color : DodgerBlue;}
+	a { color : blue;}
+  </style>
+ </head>
+ <body dir="rtl">
+ <div id="container">
+  <h1>مترجم الحمض النووي</h1>
+  <div class="widget">
+   <h2>يمكّنك هذا التطبيق من ترجمة الشفرة الوراثيّة لADN أو ARN<sub>m</sub> أو ARN<sub>t</sub>.</h2>
+   <p>ترجم من
+    <select id="from">
+	 <option value="DNA-">ADN - السلسلة غير المستنسخة</option>
+	 <option value="DNA+">ADN - السلسلة المستنسخة</option>
+	 <option value="mRNA">ARNm</option>
+	 <option value="tRNA">ARNt</option>
+    </select><br>
+	الشفرة الوراثية: <input type="text" id="code"><br>
+	إلى: 
+	<select id="to">
+	 <option value="DNA-">ADN - السلسلة غير المستنسخة</option>
+	 <option value="DNA+">ADN - السلسلة المستنسخة </option>
+	 <option value="mRNA">ARNm</option>
+	 <option value="tRNA">ARNt</option>
+	 <option value="AA">متعدد الببتيد (أحماض أمينيّة)</option>
+	</select><br>
+	<input type="button" id="translate" value="ترجم"><input type="button" id="reset" value="مسح النتيجة">
+   </p>
+  </div>
+  <div class="widget" id="result">
+   <h2>النتيجة تعرض هنا</h2>
+  </div>
+  <div class="widget" id="error"></div>
+  <div class="widget">
+   <input type="button" id="aboutP" value="حول البرنامج"><input type="button" id="aboutA" value="حول المؤلّف">
+  </div>
+  <div class="widget notice" id="about">تم إنشاء هذا البرنامج بفضل الله لغرض تعليمي هو مساعدة طلبة السنة الثالثة ثانوي في الترجمة السريعة للمورثات المختلفة.<br>
+  بدأ تطوير البرنامج يوم الأربعاء 6 ذو الحجّة 1432 الموافق ل 2 نوفمبر 2011 و انتهى العمل عليه يوم الإثنين 11 ذو الحجّة 1432 الموافق ل 7 نوفمبر 2011.<br>
+  البرنامج مجّاني بالكامل و مفتوح المصدر تحت رخصة <a href="http://www.gnu.org/licenses/gpl.html">GNU General Public License</a>.
+  </div>
+  <div class="widget notice" id="aboutAuthor">
+   <h2>معلومات حول المؤلّف:</h2>
+   <table>
+    <tr><th>الإسم:</th><td>حمزة</td></tr>
+	<tr><th>اللقب:</th><td>عبّاد</td></tr>
+	<tr><th>المستوى:</th><td>الثالثة ثانوي - علوم تجريبية</td></tr>
+	<tr><th>الثانوية:</th><td>مصطفى الأشرف</td></tr>
+	<tr><th>القسم:</th><td>2</td></tr>
+	<tr><th>العنوان:</th><td>حي 8 ماي 1945، عمارة 30أ رقم 1 - باب الزوّار</td></tr>
+	<tr><th>البريد الإلكتروني:</th><td><a href="mailto:hamza.abbad@gmail.com">hamza.abbad@gmail.com</a></td></tr>
+   </table>
+  </div>
+  </div>
+  <script type="text/javascript">
+   function translate(code,from,to){
+    function toDNAminus(code,from){var a=code.split("");
+	                               var s="";
+								   var e=[];
+	                               switch(from){
+								                case "DNA+":
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="T")s+="A";
+																			else if(a[i].toUpperCase()=="A")s+="T";
+																			else if(a[i].toUpperCase()=="C")s+="G";
+																			else if(a[i].toUpperCase()=="G")s+="C";
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+																			}
+												break;
+												case "mRNA":
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="U")s+="T";
+																			else if(a[i].toUpperCase()=="A")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="C")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="G")s+=a[i].toUpperCase();
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+																		   }
+												break;
+												case "tRNA":
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="U")s+="A";
+																			else if(a[i].toUpperCase()=="A")s+="T";
+																			else if(a[i].toUpperCase()=="C")s+="G";
+																			else if(a[i].toUpperCase()=="G")s+="C";
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+												                            }
+												break;
+												default: 
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="T")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="A")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="C")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="G")s+=a[i].toUpperCase();
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+												                            }
+												}
+								   if(e.length>0) return {code:s,errors:e};
+								   else return s;
+								  }
+	function toDNAplus(code,from){ var a=code.split("");
+	                               var s="";
+								   var e=[];
+	                               switch(from){
+								                case "DNA-":
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="T")s+="A";
+																			else if(a[i].toUpperCase()=="A")s+="T";
+																			else if(a[i].toUpperCase()=="C")s+="G";
+																			else if(a[i].toUpperCase()=="G")s+="C";
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+																			}
+												break;
+												case "tRNA":
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="U")s+="T";
+																			else if(a[i].toUpperCase()=="A")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="C")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="G")s+=a[i].toUpperCase();
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+																		   }
+												break;
+												case "mRNA":
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="U")s+="A";
+																			else if(a[i].toUpperCase()=="A")s+="T";
+																			else if(a[i].toUpperCase()=="C")s+="G";
+																			else if(a[i].toUpperCase()=="G")s+="C";
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+												                            }
+												break;
+												default: 
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="T")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="A")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="C")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="G")s+=a[i].toUpperCase();
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+												                            }
+												}
+								   if(e.length>0) return {code:s,errors:e};
+								   else return s;
+								  }
+	function tomRNA(code,from,pro){var a=code.split("");
+	                               var s="";
+								   var e=[];
+	                               switch(from){
+								                case "DNA+":
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="T")s+="A";
+																			else if(a[i].toUpperCase()=="A")s+="U";
+																			else if(a[i].toUpperCase()=="C")s+="G";
+																			else if(a[i].toUpperCase()=="G")s+="C";
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+																			}
+												break;
+												case "DNA-":
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="T")s+="U";
+																			else if(a[i].toUpperCase()=="A")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="C")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="G")s+=a[i].toUpperCase();
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+																		   }
+												break;
+												case "tRNA":
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="U")s+="A";
+																			else if(a[i].toUpperCase()=="A")s+="U";
+																			else if(a[i].toUpperCase()=="C")s+="G";
+																			else if(a[i].toUpperCase()=="G")s+="C";
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+												                            }
+												break;
+												default: 
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="U")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="A")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="C")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="G")s+=a[i].toUpperCase();
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+												                            }
+												}
+									if(pro) {
+										if(!RegExp(/[TUACG]{3}[\-\s_][TUACG]{3}/g).test(s)){var k=s.split("");
+										                                                 s="";
+										                                                 for(var x=0;x<k.length;x++){if((x+1)%3==0 && x!=1 && x!=k.length-1)s+=k[x]+"-";
+																						                             else s+=k[x];}
+																						}
+									        }
+								   if(e.length>0) return {code:s,errors:e};
+								   else return s;
+								   
+								  }
+	function totRNA(code,from){    var a=code.split("");
+	                               var s="";
+								   var e=[];
+	                               switch(from){
+								                case "DNA-":
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="T")s+="A";
+																			else if(a[i].toUpperCase()=="A")s+="U";
+																			else if(a[i].toUpperCase()=="C")s+="G";
+																			else if(a[i].toUpperCase()=="G")s+="C";
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+																			}
+												break;
+												case "DNA+":
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="T")s+="U";
+																			else if(a[i].toUpperCase()=="A")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="C")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="G")s+=a[i].toUpperCase();
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+																		   }
+												break;
+												case "mRNA":
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="U")s+="A";
+																			else if(a[i].toUpperCase()=="A")s+="U";
+																			else if(a[i].toUpperCase()=="C")s+="G";
+																			else if(a[i].toUpperCase()=="G")s+="C";
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+												                            }
+												break;
+												default: 
+												for(var i=0;i<a.length;i++){
+												                            if(a[i].toUpperCase()=="U")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="A")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="C")s+=a[i].toUpperCase();
+																			else if(a[i].toUpperCase()=="G")s+=a[i].toUpperCase();
+																			else if(a[i]=="-" || a[i]=="_" || a[i]==" ")s+=a[i];
+																			else e.push([i+1,a[i]]);
+												                            }
+												}
+								   if(e.length>0) return {code:s,errors:e};
+								   else return s;
+								  }
+	function toPolypeptide(code,from){var s="";
+	                                  code=tomRNA(code,from,true);
+	                                  if(typeof code=="string")var a=code.split(/[\-\s_]/);
+									  else {var a=code.code.split(/[\-\s_]/); var e=code.errors;}
+									  for(var i=0;i<a.length;i++){
+									                              switch(a[i]){
+																               case "UUU":
+																			   case "UUC": s+="Phe-";
+																			   break;
+																			   case "UUA":
+																			   case "UUG":
+																			   case "CUU":
+																			   case "CUC":
+																			   case "CUA":
+																			   case "CUG": s+="Leu-";
+																			   break;
+																			   case "AUU":
+																			   case "AUC":
+																			   case "AUA": s+="Ile-";
+																			   break;
+																			   case "AUG": s+="Met-";
+																			   break;
+																			   case "GUU":
+																			   case "GUC":
+																			   case "GUA":
+																			   case "GUG": s+="Val-";
+																			   break;
+																			   case "UCU":
+																			   case "UCC":
+																			   case "UCA":
+																			   case "UCG":
+																			   case "AGU":
+																			   case "AGC": s+="Ser-";
+																			   break;
+																			   case "CCU":
+																			   case "CCC":
+																			   case "CCA":
+																			   case "CCG": s+="Pro-";
+																			   break;
+																			   case "ACU":
+																			   case "ACC":
+																			   case "ACA":
+																			   case "ACG": s+="Thr-";
+																			   break;
+																			   case "GCU":
+																			   case "GCC":
+																			   case "GCA":
+																			   case "GCG": s+="Ala-";
+																			   break;
+																			   case "UAU":
+																			   case "UAC": s+="Tyr-";
+																			   break;
+																			   case "CAU":
+																			   case "CAC": s+="His-";
+																			   break;
+																			   case "CAA":
+																			   case "CAG": s+="Gln-";
+																			   break;
+																			   case "AAU":
+																			   case "AAC": s+="Asn-";
+																			   break;
+																			   case "AAA":
+																			   case "AAG": s+="Lys-";
+																			   break;
+																			   case "GAU":
+																			   case "GAC": s+="Asp-";
+																			   break;
+																			   case "GAA":
+																			   case "GAG": s+="Glu-";
+																			   break;
+																			   case "UGU":
+																			   case "UGC": s+="Cys-";
+																			   break;
+																			   case "UGG": s+="Trp-";
+																			   break;
+																			   case "CGU":
+																			   case "CGC":
+																			   case "CGA":
+																			   case "CGG":
+																			   case "AGA":
+																			   case "AGG": s+="Arg-";
+																			   break;
+																			   case "GGU":
+																			   case "GGC":
+																			   case "GGA":
+																			   case "GGG": s+="Gly-";
+																			   break;
+																			   case "UAA":
+																			   case "UAG":
+																			   case "UGA": s+="STOP-";
+																			  }
+																 }
+									  s=s.slice(0,-1);
+									  if(e) return {code:s,errors:e};
+									  else return s;
+	                                 }
+	var r;
+	if(to=="DNA+")r=toDNAplus(code,from);
+	else if(to=="DNA-")r=toDNAminus(code,from);
+	else if(to=="mRNA")r=tomRNA(code,from);
+	else if(to=="tRNA")r=totRNA(code,from);
+	else if(to=="AA")r=toPolypeptide(code,from);
+	return r;
+    }
+    function show(code,from,to,resultArea,errorArea){
+	
+    var r=translate(code,from,to);
+	if(typeof r=="string")resultArea.innerHTML=r;
+	else {resultArea.innerHTML=r.code;
+	      errorArea.style.display="block";
+	      if(r.errors.length==1)errorArea.innerHTML="تم العثور على خطأ في الشفرة الوراثية المدخلة، في المحرف رقم "+r.errors[0][0]+" (المحرف "+r.errors[0][1]+")";
+		  else {var str="تمّ العثور على عدّة أخطاء ("+r.errors.length+") في الشفرة الوراثية المدخلة:<ol>"
+		        for(var v=0;v<r.errors.length;v++)str+="<li>في المحرف رقم "+r.errors[v][0]+" ("+r.errors[v][1]+")</li>";
+				str+="</ol>";
+				errorArea.innerHTML=str;
+				}
+		}
+    }
+var D={};
+D.resultE=document.getElementById("result");
+D.errorE=document.getElementById("error");
+D.selectFrom=document.getElementById("from");
+D.input=document.getElementById("code");
+D.selectFrom=document.getElementById("from");
+D.selectTo=document.getElementById("to");
+D.aboutP=document.getElementById("aboutP");
+D.about=document.getElementById("about");
+D.aboutA=document.getElementById("aboutA");
+D.aboutAuthor=document.getElementById("aboutAuthor");
+D.T1=document.getElementById("T1");
+D.T2=document.getElementById("T2");
+D.T3=document.getElementById("T3");
+var translateB=document.getElementById("translate");
+var resetB=document.getElementById("reset");
+resetB.onclick=function(){D.resultE.innerHTML="<h2>النتيجة تعرض هنا</h2>";D.errorE.value="";D.errorE.style.display="none";}
+translateB.onclick=function(){show(D.input.value,D.selectFrom.options[D.selectFrom.selectedIndex].value,D.selectTo.options[D.selectTo.selectedIndex].value,D.resultE,D.errorE);}
+D.selectFrom.onchange=function(){D.errorE.value="";D.errorE.style.display="none";D.resultE.innerHTML="<h2>النتيجة تعرض هنا</h2>";}
+D.selectTo.onchange=function(){D.errorE.value="";D.errorE.style.display="none";D.resultE.innerHTML="<h2>النتيجة تعرض هنا</h2>";}
+D.input.onchange=function(){D.errorE.value="";D.errorE.style.display="none";D.resultE.innerHTML="<h2>النتيجة تعرض هنا</h2>";}
+D.aboutP.onclick=function(){if(D.about.style.display=="block"){D.about.style.display="none";this.value="حول البرنامج";}
+                            else {D.about.style.display="block";this.value="إخفاء";}}
+D.aboutA.onclick=function(){if(D.aboutAuthor.style.display=="block"){D.aboutAuthor.style.display="none";this.value="حول المؤلّف";}
+                            else {D.aboutAuthor.style.display="block";this.value="إخفاء";}}
+D.selectFrom.onfocus=function(){D.T1.style.display="block";}
+D.selectFrom.onblur=function(){D.T1.style.display="none";}
+  </script>
+ </body>
+</html>
